@@ -1,0 +1,28 @@
+{
+  "current": {
+    "color_primary": "#1a1a1a",
+    "color_secondary": "#c9a961",
+    "color_background": "#0d0d0d",
+    "color_text": "#e8e8e8",
+    "color_text_muted": "#999999",
+    "font_heading": "Playfair Display",
+    "font_body": "Montserrat",
+    "enable_b2b_only": true,
+    "registration_message": "Pellair Oils is an exclusive B2B platform. Please register your business for approval.",
+    "enable_brand_filter": true,
+    "enable_accord_filter": true,
+    "brands_list": "Guerlain,Nasomatto,Orto Parisi,Xerjoff,Initio,Baccarat Rouge,Creed,Tom Ford,Maison Francis Kurkdjian",
+    "hero_title": "Pellair Oils",
+    "hero_subtitle": "Exclusive Fragrance Oils for Discerning Businesses",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    }
+  }
+}

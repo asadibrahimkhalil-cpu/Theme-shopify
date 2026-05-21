@@ -1,0 +1,353 @@
+<div class="container">
+  <div class="account-wrapper">
+    
+    <div class="account-header">
+      <h1>{{ 'customer.account.title' | t }}</h1>
+      <p class="account-subtitle">Welcome back, {{ customer.first_name }}</p>
+    </div>
+
+    {% if customer.tags contains 'pending_approval' %}
+      <div class="alert alert-warning">
+        <strong>Account Pending Approval</strong>
+        <p>Your business registration is currently under review. Our team will contact you within 24-48 hours. In the meantime, you can browse our catalog but checkout will be enabled after approval.</p>
+      </div>
+    {% endif %}
+
+    {% if customer.tags contains 'approved' %}
+      <div class="alert alert-success">
+        <strong>✓ Approved Business Partner</strong>
+        <p>Your account is active. Enjoy exclusive B2B pricing and benefits.</p>
+      </div>
+    {% endif %}
+
+    <div class="account-grid">
+      
+      <!-- Account Details -->
+      <div class="account-card card">
+        <h3>{{ 'customer.account.details' | t }}</h3>
+        <div class="account-info">
+          <div class="info-row">
+            <span class="info-label">Name:</span>
+            <span class="info-value">{{ customer.first_name }} {{ customer.last_name }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ customer.email }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Account Status:</span>
+            <span class="info-value">
+              {% if customer.tags contains 'approved' %}
+                <span class="status-badge status-approved">Approved</span>
+              {% elsif customer.tags contains 'pending_approval' %}
+                <span class="status-badge status-pending">Pending Approval</span>
+              {% else %}
+                <span class="status-badge status-active">Active</span>
+              {% endif %}
+            </span>
+          </div>
+        </div>
+        <a href="/account/addresses" class="btn btn-secondary btn-small">{{ 'customer.account.view_addresses' | t }}</a>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="account-card card">
+        <h3>{{ 'customer.orders.title' | t }}</h3>
+        {% if customer.orders.size > 0 %}
+          <div class="orders-summary">
+            <div class="order-stat">
+              <span class="stat-number">{{ customer.orders.size }}</span>
+              <span class="stat-label">Total Orders</span>
+            </div>
+            <div class="order-stat">
+              <span class="stat-number">{{ customer.total_spent | money }}</span>
+              <span class="stat-label">Total Spent</span>
+            </div>
+          </div>
+          <a href="#order-history" class="btn btn-secondary btn-small">View Order History</a>
+        {% else %}
+          <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">{{ 'customer.orders.none' | t }}</p>
+          <a href="/collections/all" class="btn btn-secondary btn-small">Start Shopping</a>
+        {% endif %}
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="account-card card">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions">
+          <a href="/collections/all" class="action-link">
+            <span class="action-icon">🛍️</span>
+            <span>Browse Catalog</span>
+          </a>
+          <a href="/collections/brands" class="action-link">
+            <span class="action-icon">✨</span>
+            <span>Shop by Brand</span>
+          </a>
+          <a href="/collections/accords" class="action-link">
+            <span class="action-icon">🌸</span>
+            <span>Shop by Accord</span>
+          </a>
+          <a href="/pages/contact" class="action-link">
+            <span class="action-icon">💬</span>
+            <span>Contact Support</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    {% if customer.orders.size > 0 %}
+    <div id="order-history" class="order-history-section">
+      <h2>Order History</h2>
+      <div class="table-wrapper">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>{{ 'customer.orders.order_number' | t }}</th>
+              <th>{{ 'customer.orders.date' | t }}</th>
+              <th>{{ 'customer.orders.payment_status' | t }}</th>
+              <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+              <th>{{ 'customer.orders.total' | t }}</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in customer.orders %}
+              <tr>
+                <td><strong>#{{ order.name }}</strong></td>
+                <td>{{ order.created_at | date: "%B %d, %Y" }}</td>
+                <td>
+                  <span class="status-badge status-{{ order.financial_status | handle }}">
+                    {{ order.financial_status_label }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-badge status-{{ order.fulfillment_status | handle }}">
+                    {{ order.fulfillment_status_label }}
+                  </span>
+                </td>
+                <td><strong>{{ order.total_price | money }}</strong></td>
+                <td>
+                  <a href="{{ order.customer_url }}" class="btn-link">View Order</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<style>
+  .account-wrapper {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+  }
+
+  .account-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .account-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .account-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .account-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .account-card {
+    padding: 2rem;
+  }
+
+  .account-card h3 {
+    font-size: 1.3rem;
+    color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .account-info {
+    margin-bottom: 1.5rem;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+
+  .info-value {
+    color: var(--color-text);
+  }
+
+  .status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .status-approved {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+  }
+
+  .status-pending {
+    background: rgba(241, 196, 15, 0.2);
+    color: #f1c40f;
+    border: 1px solid rgba(241, 196, 15, 0.3);
+  }
+
+  .status-active {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+  }
+
+  .status-paid {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+  }
+
+  .status-fulfilled {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+  }
+
+  .orders-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .order-stat {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(201, 169, 97, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(201, 169, 97, 0.1);
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    margin-bottom: 0.3rem;
+    font-family: var(--font-heading);
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .quick-actions {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .action-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(201, 169, 97, 0.05);
+    border: 1px solid rgba(201, 169, 97, 0.1);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    color: var(--color-text);
+  }
+
+  .action-link:hover {
+    background: rgba(201, 169, 97, 0.1);
+    border-color: rgba(201, 169, 97, 0.3);
+    transform: translateX(5px);
+  }
+
+  .action-icon {
+    font-size: 1.5rem;
+  }
+
+  .btn-small {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .order-history-section {
+    margin-top: 4rem;
+  }
+
+  .order-history-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .orders-table {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 8px;
+  }
+
+  .btn-link {
+    color: var(--color-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+
+  .btn-link:hover {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 768px) {
+    .account-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .orders-summary {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

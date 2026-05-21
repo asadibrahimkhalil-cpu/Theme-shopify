@@ -1,0 +1,413 @@
+<div class="container">
+  
+  <div class="collection-header">
+    <h1 class="collection-title">{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="collection-description">{{ collection.description }}</div>
+    {% endif %}
+  </div>
+
+  <div class="collection-layout">
+    
+    <!-- Filter Sidebar -->
+    <aside class="filter-sidebar">
+      
+      <!-- Brand Filter -->
+      {% if settings.enable_brand_filter %}
+        <div class="filter-group">
+          <h3 class="filter-group-title">{{ 'collections.filters.brand' | t }}</h3>
+          <div class="filter-options" id="brand-filters">
+            {% assign brands = settings.brands_list | split: ',' %}
+            {% for brand in brands %}
+              <label class="filter-option">
+                <input type="checkbox" value="{{ brand | strip | handle }}" data-filter="brand">
+                <span>{{ brand | strip }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Accord Filter -->
+      {% if settings.enable_accord_filter %}
+        <div class="filter-group">
+          <h3 class="filter-group-title">{{ 'collections.filters.accord' | t }}</h3>
+          <div class="filter-options" id="accord-filters">
+            <label class="filter-option">
+              <input type="checkbox" value="floral" data-filter="accord">
+              <span>Floral</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="woody" data-filter="accord">
+              <span>Woody</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="oriental" data-filter="accord">
+              <span>Oriental</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="fresh" data-filter="accord">
+              <span>Fresh</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="citrus" data-filter="accord">
+              <span>Citrus</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="spicy" data-filter="accord">
+              <span>Spicy</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="amber" data-filter="accord">
+              <span>Amber</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="aquatic" data-filter="accord">
+              <span>Aquatic</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="gourmand" data-filter="accord">
+              <span>Gourmand</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="leather" data-filter="accord">
+              <span>Leather</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="musk" data-filter="accord">
+              <span>Musk</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="oud" data-filter="accord">
+              <span>Oud</span>
+            </label>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Concentration Filter -->
+      <div class="filter-group">
+        <h3 class="filter-group-title">{{ 'collections.filters.concentration' | t }}</h3>
+        <div class="filter-options" id="concentration-filters">
+          <label class="filter-option">
+            <input type="checkbox" value="parfum" data-filter="concentration">
+            <span>Parfum (20-30%)</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" value="edp" data-filter="concentration">
+            <span>Eau de Parfum (15-20%)</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" value="edt" data-filter="concentration">
+            <span>Eau de Toilette (5-15%)</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" value="edc" data-filter="concentration">
+            <span>Eau de Cologne (2-5%)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Size Filter -->
+      <div class="filter-group">
+        <h3 class="filter-group-title">{{ 'collections.filters.size' | t }}</h3>
+        <div class="filter-options" id="size-filters">
+          <label class="filter-option">
+            <input type="checkbox" value="100g" data-filter="size">
+            <span>100g - 1kg</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" value="1kg" data-filter="size">
+            <span>1kg - 5kg</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" value="5kg" data-filter="size">
+            <span>5kg+</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Clear Filters -->
+      <button class="btn btn-secondary btn-full" onclick="clearAllFilters()">
+        {{ 'collections.filters.clear_all' | t }}
+      </button>
+
+    </aside>
+
+    <!-- Products Grid -->
+    <div class="collection-main">
+      
+      <div class="collection-toolbar">
+        <div class="collection-count">
+          <span id="product-count">{{ collection.products.size }}</span> {{ 'collections.general.items_with_count.other' | t: count: collection.products.size }}
+        </div>
+
+        <div class="sort-by">
+          <label for="SortBy">{{ 'collections.sorting.title' | t }}:</label>
+          <select id="SortBy" onchange="sortProducts(this.value)">
+            <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+            <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+            <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+            <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+            <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+            <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+            <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+            <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="product-grid" id="products-grid">
+        {% for product in collection.products %}
+          <div class="product-card" 
+               data-brand="{{ product.metafields.custom.brand | default: product.vendor | handle }}"
+               data-accord="{{ product.metafields.custom.accord | handle }}"
+               data-concentration="{{ product.metafields.custom.concentration | handle }}"
+               data-tags="{{ product.tags | join: ',' | handle }}">
+            
+            <a href="{{ product.url }}">
+              <div class="product-image-wrapper">
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title | escape }}">
+                {% else %}
+                  <div class="no-image">No image</div>
+                {% endif %}
+                
+                {% if product.compare_at_price > product.price %}
+                  <div class="product-badge">Sale</div>
+                {% elsif product.tags contains 'new' %}
+                  <div class="product-badge">New</div>
+                {% endif %}
+              </div>
+
+              <div class="product-info">
+                <div class="product-brand">{{ product.metafields.custom.brand | default: product.vendor }}</div>
+                <h3 class="product-title">{{ product.title }}</h3>
+                
+                {% if product.metafields.custom.accord %}
+                  <div class="product-accord">{{ product.metafields.custom.accord }}</div>
+                {% endif %}
+                
+                <div class="product-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="product-price-compare">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                  {{ product.price | money }}
+                </div>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if collection.products.size == 0 %}
+        <div class="empty-collection">
+          <h3>{{ 'collections.general.no_matches' | t }}</h3>
+          <p>No products found in this collection.</p>
+        </div>
+      {% endif %}
+
+      <!-- Pagination -->
+      {% if paginate.pages > 1 %}
+        <div class="pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}" class="pagination-btn">{{ 'general.pagination.previous' | t }}</a>
+          {% endif %}
+
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a href="{{ part.url }}" class="pagination-number">{{ part.title }}</a>
+            {% else %}
+              <span class="pagination-number active">{{ part.title }}</span>
+            {% endif %}
+          {% endfor %}
+
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}" class="pagination-btn">{{ 'general.pagination.next' | t }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+  .empty-collection {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--color-text-muted);
+  }
+
+  .empty-collection h3 {
+    font-size: 2rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 3rem 0;
+  }
+
+  .pagination-btn,
+  .pagination-number {
+    padding: 0.7rem 1.2rem;
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: 4px;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .pagination-btn:hover,
+  .pagination-number:hover {
+    background: rgba(201, 169, 97, 0.2);
+    border-color: var(--color-secondary);
+  }
+
+  .pagination-number.active {
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    border-color: var(--color-secondary);
+  }
+
+  .product-card[style*="display: none"] {
+    display: none !important;
+  }
+
+  @media (max-width: 640px) {
+    .collection-toolbar {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sort-by {
+      width: 100%;
+    }
+
+    .sort-by select {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Filter functionality
+  function applyFilters() {
+    const products = document.querySelectorAll('.product-card');
+    const activeFilters = {
+      brand: [],
+      accord: [],
+      concentration: [],
+      size: []
+    };
+
+    // Collect active filters
+    document.querySelectorAll('input[data-filter]:checked').forEach(input => {
+      const filterType = input.dataset.filter;
+      activeFilters[filterType].push(input.value);
+    });
+
+    let visibleCount = 0;
+
+    // Filter products
+    products.forEach(product => {
+      let shouldShow = true;
+
+      // Check brand filter
+      if (activeFilters.brand.length > 0) {
+        const productBrand = product.dataset.brand;
+        if (!activeFilters.brand.includes(productBrand)) {
+          shouldShow = false;
+        }
+      }
+
+      // Check accord filter
+      if (activeFilters.accord.length > 0) {
+        const productAccord = product.dataset.accord;
+        if (!activeFilters.accord.some(accord => productAccord.includes(accord))) {
+          shouldShow = false;
+        }
+      }
+
+      // Check concentration filter
+      if (activeFilters.concentration.length > 0) {
+        const productConcentration = product.dataset.concentration;
+        if (!activeFilters.concentration.some(conc => productConcentration.includes(conc))) {
+          shouldShow = false;
+        }
+      }
+
+      // Check size filter (via tags)
+      if (activeFilters.size.length > 0) {
+        const productTags = product.dataset.tags;
+        if (!activeFilters.size.some(size => productTags.includes(size))) {
+          shouldShow = false;
+        }
+      }
+
+      product.style.display = shouldShow ? '' : 'none';
+      if (shouldShow) visibleCount++;
+    });
+
+    // Update count
+    document.getElementById('product-count').textContent = visibleCount;
+  }
+
+  // Clear all filters
+  function clearAllFilters() {
+    document.querySelectorAll('input[data-filter]').forEach(input => {
+      input.checked = false;
+    });
+    applyFilters();
+  }
+
+  // Sort products
+  function sortProducts(sortBy) {
+    const grid = document.getElementById('products-grid');
+    const products = Array.from(grid.querySelectorAll('.product-card'));
+
+    products.sort((a, b) => {
+      switch(sortBy) {
+        case 'title-ascending':
+          return a.querySelector('.product-title').textContent.localeCompare(
+            b.querySelector('.product-title').textContent
+          );
+        case 'title-descending':
+          return b.querySelector('.product-title').textContent.localeCompare(
+            a.querySelector('.product-title').textContent
+          );
+        case 'price-ascending':
+          return parseFloat(a.querySelector('.product-price').textContent.replace(/[^0-9.]/g, '')) -
+                 parseFloat(b.querySelector('.product-price').textContent.replace(/[^0-9.]/g, ''));
+        case 'price-descending':
+          return parseFloat(b.querySelector('.product-price').textContent.replace(/[^0-9.]/g, '')) -
+                 parseFloat(a.querySelector('.product-price').textContent.replace(/[^0-9.]/g, ''));
+        default:
+          return 0;
+      }
+    });
+
+    // Re-append sorted products
+    products.forEach(product => grid.appendChild(product));
+  }
+
+  // Add event listeners to filters
+  document.querySelectorAll('input[data-filter]').forEach(input => {
+    input.addEventListener('change', applyFilters);
+  });
+
+  // Preserve URL parameters for sorting
+  const urlParams = new URLSearchParams(window.location.search);
+  const sortValue = urlParams.get('sort_by');
+  if (sortValue) {
+    document.getElementById('SortBy').value = sortValue;
+  }
+</script>

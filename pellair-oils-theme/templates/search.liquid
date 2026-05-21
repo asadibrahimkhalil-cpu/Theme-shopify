@@ -1,0 +1,201 @@
+<div class="container">
+  
+  <div class="search-header">
+    <h1>Search Results</h1>
+    {% if search.performed %}
+      <p class="search-query">Results for "{{ search.terms }}"</p>
+    {% endif %}
+  </div>
+
+  <div class="search-form-wrapper">
+    <form action="/search" method="get" class="search-form">
+      <input 
+        type="search" 
+        name="q" 
+        placeholder="Search for fragrance oils, brands, accords..."
+        value="{{ search.terms | escape }}"
+        class="search-input"
+      >
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+
+  {% if search.performed %}
+    {% if search.results.size > 0 %}
+      
+      <div class="search-results-info">
+        Found {{ search.results.size }} result{% if search.results.size != 1 %}s{% endif %}
+      </div>
+
+      <div class="product-grid">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            <div class="product-card">
+              <a href="{{ item.url }}">
+                <div class="product-image-wrapper">
+                  {% if item.featured_image %}
+                    <img src="{{ item.featured_image | img_url: 'medium' }}" alt="{{ item.title | escape }}">
+                  {% else %}
+                    <div class="no-image">No image</div>
+                  {% endif %}
+                </div>
+
+                <div class="product-info">
+                  <div class="product-brand">{{ item.vendor }}</div>
+                  <h3 class="product-title">{{ item.title }}</h3>
+                  <div class="product-price">{{ item.price | money }}</div>
+                </div>
+              </a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+    {% else %}
+      
+      <div class="empty-search">
+        <h2>No results found</h2>
+        <p>Try different keywords or browse our collections</p>
+        <div class="empty-search-actions">
+          <a href="/collections/all" class="btn btn-primary">View All Products</a>
+          <a href="/collections/brands" class="btn btn-secondary">Shop by Brand</a>
+        </div>
+      </div>
+
+    {% endif %}
+  {% else %}
+    
+    <div class="search-suggestions">
+      <h2>Popular Searches</h2>
+      <div class="suggestions-grid">
+        <a href="/search?q=guerlain" class="suggestion-tag">Guerlain</a>
+        <a href="/search?q=oud" class="suggestion-tag">Oud</a>
+        <a href="/search?q=floral" class="suggestion-tag">Floral</a>
+        <a href="/search?q=woody" class="suggestion-tag">Woody</a>
+        <a href="/search?q=oriental" class="suggestion-tag">Oriental</a>
+        <a href="/search?q=nasomatto" class="suggestion-tag">Nasomatto</a>
+      </div>
+    </div>
+
+  {% endif %}
+
+</div>
+
+<style>
+  .search-header {
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .search-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-query {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .search-form-wrapper {
+    max-width: 700px;
+    margin: 3rem auto;
+  }
+
+  .search-form {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 1.2rem 1.5rem;
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 4px;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 1rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+  }
+
+  .search-results-info {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin: 2rem 0;
+  }
+
+  .empty-search {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .empty-search h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-search p {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .empty-search-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .search-suggestions {
+    text-align: center;
+    padding: 3rem 0;
+  }
+
+  .search-suggestions h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .suggestions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .suggestion-tag {
+    padding: 0.8rem 1.5rem;
+    background: rgba(201, 169, 97, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 6px;
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .suggestion-tag:hover {
+    background: rgba(201, 169, 97, 0.2);
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .search-form {
+      flex-direction: column;
+    }
+
+    .search-header h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

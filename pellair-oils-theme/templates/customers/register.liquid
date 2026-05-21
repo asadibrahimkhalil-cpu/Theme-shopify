@@ -1,0 +1,243 @@
+<div class="container">
+  <div class="customer-auth-wrapper">
+    <div class="auth-container">
+      
+      <div class="auth-header">
+        <h1>{{ 'customer.register.title' | t }}</h1>
+        <p class="auth-subtitle">Join our exclusive B2B network</p>
+      </div>
+
+      {% if settings.enable_b2b_only %}
+        <div class="alert alert-warning">
+          <strong>Business Approval Required</strong>
+          {{ settings.approval_requirements }}
+        </div>
+      {% endif %}
+
+      {% form 'create_customer' %}
+        
+        {% if form.errors %}
+          <div class="alert alert-error">
+            <strong>Please correct the following:</strong>
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        {% if form.posted_successfully? %}
+          <div class="alert alert-success">
+            <strong>{{ 'customer.register.approval_message' | t }}</strong>
+          </div>
+        {% endif %}
+
+        <div class="form-section">
+          <h3 class="form-section-title">Personal Information</h3>
+          
+          <div class="form-row">
+            <div class="form-field">
+              <label for="RegisterFirstName">First Name *</label>
+              <input
+                type="text"
+                name="customer[first_name]"
+                id="RegisterFirstName"
+                required
+                placeholder="John"
+                {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="RegisterLastName">Last Name *</label>
+              <input
+                type="text"
+                name="customer[last_name]"
+                id="RegisterLastName"
+                required
+                placeholder="Doe"
+                {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+              >
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="RegisterEmail">Email *</label>
+            <input
+              type="email"
+              name="customer[email]"
+              id="RegisterEmail"
+              autocomplete="email"
+              required
+              placeholder="your@business-email.com"
+              {% if form.email %}value="{{ form.email }}"{% endif %}
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="RegisterPassword">Password *</label>
+            <input
+              type="password"
+              name="customer[password]"
+              id="RegisterPassword"
+              autocomplete="new-password"
+              required
+              placeholder="Minimum 8 characters"
+              minlength="8"
+            >
+            <small style="color: var(--color-text-muted); font-size: 0.85rem;">Must be at least 8 characters</small>
+          </div>
+        </div>
+
+        <div class="ornamental-divider">
+          <span>❖</span>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">Business Information</h3>
+          
+          <div class="form-field">
+            <label for="BusinessName">{{ 'customer.register.business_name' | t }} *</label>
+            <input
+              type="text"
+              name="customer[note][business_name]"
+              id="BusinessName"
+              required
+              placeholder="Your Company Name"
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="BusinessType">{{ 'customer.register.business_type' | t }} *</label>
+            <select name="customer[note][business_type]" id="BusinessType" required>
+              <option value="">Select Business Type</option>
+              <option value="retailer">Retailer</option>
+              <option value="distributor">Distributor</option>
+              <option value="manufacturer">Manufacturer</option>
+              <option value="spa_salon">Spa / Salon</option>
+              <option value="perfumer">Perfumer / Perfume House</option>
+              <option value="candle_maker">Candle Maker</option>
+              <option value="soap_maker">Soap / Cosmetics Maker</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="TaxID">{{ 'customer.register.tax_id' | t }} *</label>
+            <input
+              type="text"
+              name="customer[note][tax_id]"
+              id="TaxID"
+              required
+              placeholder="Business Registration / Tax ID Number"
+            >
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="BusinessPhone">Business Phone</label>
+              <input
+                type="tel"
+                name="customer[note][phone]"
+                id="BusinessPhone"
+                placeholder="+1 (555) 123-4567"
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="BusinessWebsite">Website</label>
+              <input
+                type="url"
+                name="customer[note][website]"
+                id="BusinessWebsite"
+                placeholder="www.yourbusiness.com"
+              >
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="BusinessAddress">Business Address *</label>
+            <textarea
+              name="customer[note][address]"
+              id="BusinessAddress"
+              required
+              placeholder="Street address, City, State/Province, ZIP/Postal Code, Country"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="BusinessDescription">Tell us about your business</label>
+            <textarea
+              name="customer[note][description]"
+              id="BusinessDescription"
+              placeholder="Brief description of your business and how you plan to use our fragrance oils"
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label style="display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer;">
+            <input
+              type="checkbox"
+              name="customer[accepts_marketing]"
+              id="AcceptsMarketing"
+              style="margin-top: 0.2rem;"
+            >
+            <span style="font-size: 0.9rem; text-transform: none; letter-spacing: normal;">
+              I would like to receive exclusive offers, new product announcements, and industry insights from Pellair Oils
+            </span>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-full">
+            {{ 'customer.register.submit' | t }}
+          </button>
+        </div>
+
+        <div class="auth-links">
+          <a href="/account/login" class="link-secondary">Already have an account? Sign in</a>
+        </div>
+
+      {% endform %}
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .customer-auth-wrapper {
+    max-width: 700px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+  }
+
+  .form-section {
+    margin-bottom: 2rem;
+  }
+
+  .form-section-title {
+    font-size: 1.3rem;
+    color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .auth-container {
+      padding: 2rem 1.5rem;
+    }
+  }
+</style>

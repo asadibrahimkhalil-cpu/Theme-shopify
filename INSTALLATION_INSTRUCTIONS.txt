@@ -1,0 +1,227 @@
+╔════════════════════════════════════════════════════════════════════╗
+║                                                                    ║
+║              PELLAIR OILS - SHOPIFY THEME                          ║
+║              Ready to Upload & Install                             ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝
+
+📦 PACKAGE CONTENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ pellair-oils-theme.zip (48 KB) - READY FOR SHOPIFY UPLOAD
+
+This ZIP file contains:
+  • Complete theme files (layout, templates, assets, config)
+  • Customer authentication & B2B registration system
+  • Brand & accord filtering system
+  • Product templates with metafield support
+  • Luxury dark theme with gold accents
+  • Mobile-responsive design
+  • README.md - Full documentation
+  • SETUP_GUIDE.md - Step-by-step setup instructions
+
+
+🚀 QUICK INSTALLATION (5 MINUTES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. LOG INTO SHOPIFY
+   → Go to your Shopify Admin panel
+   → Navigate to: Online Store > Themes
+
+2. UPLOAD THEME
+   → Click "Upload theme" button
+   → Select: pellair-oils-theme.zip
+   → Wait for upload to complete
+
+3. PUBLISH THEME
+   → Once uploaded, click "Publish" on the new theme
+   → Your store is now live with the Pellair Oils theme!
+
+4. CONFIGURE METAFIELDS (REQUIRED)
+   → Go to: Settings > Custom Data > Products
+   → Add these metafields for brand/accord filtering:
+     
+     • Brand (custom.brand) - Single line text
+     • Accord (custom.accord) - Single line text
+     • Concentration (custom.concentration) - Single line text
+     • Top Notes (custom.top_notes) - Multi-line text
+     • Middle Notes (custom.middle_notes) - Multi-line text
+     • Base Notes (custom.base_notes) - Multi-line text
+     • Minimum Order (custom.minimum_order) - Integer
+
+5. ADD YOUR FIRST PRODUCT
+   → Products > Add product
+   → Fill in title, description, price, images
+   → In Metafields section, add:
+     - Brand: "Guerlain" (or your brand)
+     - Accord: "floral" (or woody, oriental, etc.)
+     - Concentration: "EDP"
+     - Notes: Top, Middle, Base notes
+   → Save product
+
+
+📋 COMPLETE SETUP CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After installation, complete these steps:
+
+□ Upload and publish theme
+□ Configure product metafields
+□ Add products with metafields
+□ Create collections (All Products, Brands, Accords)
+□ Set up navigation menu
+□ Create essential pages (About, Contact, Terms, Privacy)
+□ Test business registration flow
+□ Test customer approval (add "approved" tag)
+□ Configure payment gateway
+□ Set up shipping zones
+□ Test checkout process
+□ Verify mobile responsiveness
+□ Add your domain name
+
+
+🎯 KEY FEATURES TO TEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. BUSINESS REGISTRATION
+   • Go to: /account/register
+   • Fill out business registration form
+   • Account created with "pending_approval" status
+
+2. CUSTOMER APPROVAL WORKFLOW
+   • Admin: Go to Customers
+   • Find new customer
+   • Add tag: "approved"
+   • Remove tag: "pending_approval"
+   • Customer can now checkout
+
+3. BRAND & ACCORD FILTERING
+   • Go to: /collections/all
+   • Use sidebar filters for brands
+   • Use sidebar filters for accords
+   • Filters work in real-time
+
+4. PRODUCT PAGES
+   • Luxury styling with dark theme
+   • Image gallery with thumbnails
+   • Brand and accord badges
+   • Tabbed information (Details, Notes, Usage)
+   • Bulk quantity controls
+
+
+🎨 THEME CUSTOMIZATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Access: Online Store > Themes > Customize
+
+Available Settings:
+• Colors (Primary, Secondary, Background, Text)
+• Typography (Heading & Body fonts)
+• B2B Settings (Enable approval, messages)
+• Brand List (Featured luxury brands)
+• Homepage (Hero title, subtitle, image)
+• Navigation & Footer
+
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Inside the theme folder:
+
+README.md - Complete theme documentation including:
+  • All features explained
+  • Theme structure
+  • Configuration guide
+  • Product metafield setup
+  • Customer tag system
+  • SEO optimization
+  • Browser compatibility
+
+SETUP_GUIDE.md - Step-by-step setup instructions including:
+  • Quick start (5 minutes)
+  • Metafield configuration
+  • Product setup examples
+  • Collection creation
+  • Customer approval process
+  • Launch checklist
+  • Troubleshooting
+
+
+🏷️ PRODUCT METAFIELDS REFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ACCORD OPTIONS (use lowercase):
+  floral, woody, oriental, fresh, citrus, spicy, amber, 
+  aquatic, gourmand, leather, musk, oud
+
+CONCENTRATION OPTIONS:
+  Parfum, EDP, EDT, EDC
+
+BRAND EXAMPLES:
+  Guerlain, Nasomatto, Orto Parisi, Xerjoff, Initio,
+  Baccarat Rouge, Creed, Tom Ford, Maison Francis Kurkdjian
+
+
+👥 B2B CUSTOMER WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CUSTOMER REGISTERS
+   → Fills business registration form
+   → Account created (tagged: pending_approval)
+   → Can browse but cannot checkout
+
+2. ADMIN REVIEWS
+   → Check customer details in Shopify Admin
+   → Verify business legitimacy
+   → Decide to approve or decline
+
+3. ADMIN APPROVES
+   → Add tag: "approved"
+   → Remove tag: "pending_approval"
+   → Optionally send welcome email
+
+4. CUSTOMER ACTIVATED
+   → Can now checkout
+   → Sees B2B pricing (if configured)
+   → Full access to bulk ordering
+
+
+💡 TIPS FOR SUCCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Add high-quality product images (3:4 ratio recommended)
+✓ Use consistent brand names (case-sensitive)
+✓ Fill in all product metafields for best results
+✓ Create brand and accord collections
+✓ Set up B2B-specific pricing
+✓ Test registration workflow before launch
+✓ Mobile test on real devices
+✓ Set up Google Analytics
+✓ Configure email notifications
+✓ Add SSL certificate (required)
+
+
+📞 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Shopify Help Center: help.shopify.com
+• Shopify Community: community.shopify.com
+• Theme Documentation: See README.md
+• Setup Guide: See SETUP_GUIDE.md
+
+
+═══════════════════════════════════════════════════════════════════════
+
+FILE LOCATION: /projects/sandbox/Theme-shopify/pellair-oils-theme.zip
+FILE SIZE: 48 KB
+STATUS: ✓ READY TO UPLOAD
+
+═══════════════════════════════════════════════════════════════════════
+
+Your luxury B2B Shopify theme is ready to use!
+Upload pellair-oils-theme.zip to your Shopify store and start selling.
+
+Created for: Pellair Oils
+Exclusive Fragrance Oils for Discerning Businesses
+
+═══════════════════════════════════════════════════════════════════════

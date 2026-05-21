@@ -1,0 +1,55 @@
+<div class="container">
+  
+  <div class="error-404">
+    <div class="error-icon">404</div>
+    <h1>{{ 'general.404.title' | t }}</h1>
+    <p>{{ 'general.404.subtext' | t }}</p>
+    
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">Return Home</a>
+      <a href="/collections/all" class="btn btn-secondary">Browse Catalog</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .error-404 {
+    text-align: center;
+    padding: 6rem 2rem;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-icon {
+    font-size: 8rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+  }
+
+  .error-404 h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .error-404 p {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    margin-bottom: 3rem;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>

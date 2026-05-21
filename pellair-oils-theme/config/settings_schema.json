@@ -1,0 +1,180 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Pellair Oils",
+    "theme_version": "1.0.0",
+    "theme_author": "Pellair Oils",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Luxury Color Palette"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Color (Gold Accent)",
+        "default": "#c9a961"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background Color",
+        "default": "#0d0d0d"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text Color",
+        "default": "#e8e8e8"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Muted Text",
+        "default": "#999999"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Font Settings"
+      },
+      {
+        "type": "select",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "options": [
+          {
+            "value": "Playfair Display",
+            "label": "Playfair Display (Elegant Serif)"
+          },
+          {
+            "value": "Cormorant Garamond",
+            "label": "Cormorant Garamond (Luxury)"
+          },
+          {
+            "value": "Cinzel",
+            "label": "Cinzel (Classic)"
+          }
+        ],
+        "default": "Playfair Display"
+      },
+      {
+        "type": "select",
+        "id": "font_body",
+        "label": "Body Font",
+        "options": [
+          {
+            "value": "Montserrat",
+            "label": "Montserrat (Modern)"
+          },
+          {
+            "value": "Lato",
+            "label": "Lato (Clean)"
+          },
+          {
+            "value": "Raleway",
+            "label": "Raleway (Elegant)"
+          }
+        ],
+        "default": "Montserrat"
+      }
+    ]
+  },
+  {
+    "name": "Business Registration",
+    "settings": [
+      {
+        "type": "header",
+        "content": "B2B Access Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_b2b_only",
+        "label": "Enable B2B Only Access",
+        "default": true,
+        "info": "Require business approval before customers can shop"
+      },
+      {
+        "type": "text",
+        "id": "registration_message",
+        "label": "Registration Required Message",
+        "default": "Pellair Oils is an exclusive B2B platform. Please register your business for approval."
+      },
+      {
+        "type": "richtext",
+        "id": "approval_requirements",
+        "label": "Approval Requirements Text",
+        "default": "<p>To register as a business partner, please provide your business details. Our team will review your application within 24-48 hours.</p>"
+      }
+    ]
+  },
+  {
+    "name": "Product Catalog",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Catalog Organization"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_brand_filter",
+        "label": "Enable Brand Filtering",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_accord_filter",
+        "label": "Enable Accord Filtering",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "brands_list",
+        "label": "Featured Brands (comma separated)",
+        "default": "Guerlain,Nasomatto,Orto Parisi,Xerjoff,Initio,Baccarat Rouge,Creed,Tom Ford,Maison Francis Kurkdjian",
+        "info": "List of luxury brands to feature"
+      }
+    ]
+  },
+  {
+    "name": "Homepage",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Hero Section"
+      },
+      {
+        "type": "image_picker",
+        "id": "hero_image",
+        "label": "Hero Background Image"
+      },
+      {
+        "type": "text",
+        "id": "hero_title",
+        "label": "Hero Title",
+        "default": "Pellair Oils"
+      },
+      {
+        "type": "textarea",
+        "id": "hero_subtitle",
+        "label": "Hero Subtitle",
+        "default": "Exclusive Fragrance Oils for Discerning Businesses"
+      }
+    ]
+  }
+]

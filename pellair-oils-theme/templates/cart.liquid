@@ -1,0 +1,632 @@
+<div class="container">
+  
+  <div class="cart-header">
+    <h1>{{ 'cart.general.title' | t }}</h1>
+  </div>
+
+  {% if cart.item_count > 0 %}
+    
+    <div class="cart-layout">
+      
+      <!-- Cart Items -->
+      <div class="cart-items-section">
+        
+        {% if customer and customer.tags contains 'approved' %}
+          <div class="alert alert-success">
+            ✓ B2B pricing applied. Viewing wholesale prices.
+          </div>
+        {% elsif customer and customer.tags contains 'pending_approval' %}
+          <div class="alert alert-warning">
+            Your account is pending approval. Checkout will be enabled after verification.
+          </div>
+        {% endif %}
+
+        <form action="/cart" method="post" id="cart-form">
+          
+          <div class="cart-items">
+            {% for item in cart.items %}
+              <div class="cart-item" data-line="{{ forloop.index }}">
+                
+                <div class="cart-item-image">
+                  {% if item.image %}
+                    <img src="{{ item.image | img_url: 'small' }}" alt="{{ item.title | escape }}">
+                  {% else %}
+                    <div class="no-image">No image</div>
+                  {% endif %}
+                </div>
+
+                <div class="cart-item-details">
+                  <h3 class="cart-item-title">
+                    <a href="{{ item.url }}">{{ item.product.title }}</a>
+                  </h3>
+                  
+                  {% if item.product.metafields.custom.brand or item.vendor %}
+                    <div class="cart-item-brand">{{ item.product.metafields.custom.brand | default: item.vendor }}</div>
+                  {% endif %}
+                  
+                  {% if item.variant.title != 'Default Title' %}
+                    <div class="cart-item-variant">{{ item.variant.title }}</div>
+                  {% endif %}
+
+                  {% if item.properties.size > 0 %}
+                    <div class="cart-item-properties">
+                      {% for p in item.properties %}
+                        {% unless p.last == blank %}
+                          <div class="property">
+                            <strong>{{ p.first }}:</strong> {{ p.last }}
+                          </div>
+                        {% endunless %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+
+                <div class="cart-item-quantity">
+                  <label for="updates_{{ item.key }}">{{ 'cart.general.quantity' | t }}</label>
+                  <div class="quantity-selector">
+                    <button type="button" class="quantity-btn" onclick="decrementCartQuantity('{{ item.key }}')">−</button>
+                    <input 
+                      type="number" 
+                      id="updates_{{ item.key }}"
+                      name="updates[]" 
+                      value="{{ item.quantity }}" 
+                      min="0" 
+                      class="quantity-input"
+                      data-line="{{ forloop.index }}"
+                    >
+                    <button type="button" class="quantity-btn" onclick="incrementCartQuantity('{{ item.key }}')">+</button>
+                  </div>
+                </div>
+
+                <div class="cart-item-price">
+                  <div class="item-price-each">{{ item.price | money }} each</div>
+                  <div class="item-price-total">{{ item.line_price | money }}</div>
+                  {% if item.original_line_price > item.line_price %}
+                    <div class="item-price-compare">{{ item.original_line_price | money }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="cart-item-remove">
+                  <button 
+                    type="button" 
+                    class="remove-btn" 
+                    onclick="removeCartItem('{{ item.key }}')"
+                    aria-label="Remove {{ item.title }}"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="cart-actions">
+            <button type="submit" name="update" class="btn btn-secondary">
+              {{ 'cart.general.update' | t }}
+            </button>
+            <a href="/collections/all" class="btn-link">{{ 'cart.general.continue_shopping' | t }}</a>
+          </div>
+
+        </form>
+
+        <!-- Order Notes -->
+        <div class="cart-note-section">
+          <h3>{{ 'cart.general.note' | t }}</h3>
+          <form action="/cart" method="post">
+            <textarea 
+              name="note" 
+              id="CartNote" 
+              placeholder="Special instructions, delivery notes, or questions about your order..."
+            >{{ cart.note }}</textarea>
+            <button type="submit" class="btn btn-secondary btn-small">Save Note</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="cart-summary-section">
+        <div class="cart-summary card">
+          
+          <h2>Order Summary</h2>
+
+          <div class="summary-line">
+            <span>Subtotal ({{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %})</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+
+          {% if cart.cart_level_discount_applications.size > 0 %}
+            {% for discount in cart.cart_level_discount_applications %}
+              <div class="summary-line summary-discount">
+                <span>Discount: {{ discount.title }}</span>
+                <span>-{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="summary-note">
+            {{ 'cart.general.taxes_and_shipping' | t }}
+          </div>
+
+          <div class="summary-total">
+            <span>Total</span>
+            <span class="total-price">{{ cart.total_price | money }}</span>
+          </div>
+
+          {% if customer and customer.tags contains 'approved' %}
+            <button type="submit" name="checkout" class="btn btn-primary btn-full" onclick="document.getElementById('cart-form').submit()">
+              {{ 'cart.general.checkout' | t }}
+            </button>
+          {% elsif customer and customer.tags contains 'pending_approval' %}
+            <button type="button" class="btn btn-secondary btn-full" disabled>
+              Checkout Available After Approval
+            </button>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 1rem;">
+              Your account is under review. You'll be able to place orders within 24-48 hours.
+            </p>
+          {% elsif customer %}
+            <button type="submit" name="checkout" class="btn btn-primary btn-full" onclick="document.getElementById('cart-form').submit()">
+              {{ 'cart.general.checkout' | t }}
+            </button>
+          {% else %}
+            <a href="/account/login?checkout_url={{ cart.checkout_url }}" class="btn btn-primary btn-full">
+              Login to Checkout
+            </a>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 1rem;">
+              <a href="/account/register" style="color: var(--color-secondary);">Register your business</a> to access B2B pricing
+            </p>
+          {% endif %}
+
+          <!-- Trust Badges -->
+          <div class="trust-badges">
+            <div class="trust-badge">
+              <span class="badge-icon">🔒</span>
+              <span class="badge-text">Secure Checkout</span>
+            </div>
+            <div class="trust-badge">
+              <span class="badge-icon">📦</span>
+              <span class="badge-text">Professional Packaging</span>
+            </div>
+            <div class="trust-badge">
+              <span class="badge-icon">✓</span>
+              <span class="badge-text">Quality Guaranteed</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+          <h4>Accepted Payment Methods</h4>
+          <div class="payment-icons">
+            <span class="payment-icon">💳 Visa</span>
+            <span class="payment-icon">💳 Mastercard</span>
+            <span class="payment-icon">💳 Amex</span>
+            <span class="payment-icon">🏦 Bank Transfer</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  {% else %}
+    
+    <!-- Empty Cart -->
+    <div class="empty-cart">
+      <div class="empty-cart-icon">🛍️</div>
+      <h2>{{ 'cart.general.empty' | t }}</h2>
+      <p>Start exploring our exclusive collection of luxury fragrance oils</p>
+      <div class="empty-cart-actions">
+        <a href="/collections/all" class="btn btn-primary">{{ 'cart.general.continue_shopping' | t }}</a>
+        <a href="/collections/brands" class="btn btn-secondary">Shop by Brand</a>
+      </div>
+    </div>
+
+  {% endif %}
+
+</div>
+
+<style>
+  .cart-header {
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .cart-header h1 {
+    font-size: 3rem;
+  }
+
+  .cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+    margin: 2rem 0;
+  }
+
+  .cart-items-section {
+    min-height: 400px;
+  }
+
+  .cart-items {
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto 150px 40px;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+  }
+
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item-image {
+    width: 100px;
+    height: 130px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+  }
+
+  .cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-item-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-item-title a {
+    color: var(--color-text);
+    transition: color 0.3s ease;
+  }
+
+  .cart-item-title a:hover {
+    color: var(--color-secondary);
+  }
+
+  .cart-item-brand {
+    font-size: 0.85rem;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+
+  .cart-item-variant {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .cart-item-properties {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .cart-item-quantity label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .cart-item-price {
+    text-align: right;
+  }
+
+  .item-price-each {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .item-price-total {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+  }
+
+  .item-price-compare {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+    margin-top: 0.3rem;
+  }
+
+  .cart-item-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .remove-btn {
+    background: rgba(231, 76, 60, 0.2);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .remove-btn:hover {
+    background: rgba(231, 76, 60, 0.4);
+    border-color: #e74c3c;
+  }
+
+  .cart-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+  }
+
+  .cart-note-section {
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+
+  .cart-note-section h3 {
+    font-size: 1.2rem;
+    color: var(--color-secondary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .cart-note-section textarea {
+    width: 100%;
+    min-height: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .cart-summary-section {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+  }
+
+  .cart-summary {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cart-summary h2 {
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+    font-size: 1rem;
+  }
+
+  .summary-discount {
+    color: #2ecc71;
+  }
+
+  .summary-note {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    padding: 1rem 0;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    border-top: 2px solid var(--color-secondary);
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .total-price {
+    color: var(--color-secondary);
+    font-family: var(--font-heading);
+    font-size: 2rem;
+  }
+
+  .trust-badges {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201, 169, 97, 0.1);
+  }
+
+  .trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+  }
+
+  .badge-icon {
+    font-size: 1.2rem;
+  }
+
+  .badge-text {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .payment-methods {
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .payment-methods h4 {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+
+  .payment-icon {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+    background: rgba(201, 169, 97, 0.05);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 4px;
+    color: var(--color-text-muted);
+  }
+
+  /* Empty Cart */
+  .empty-cart {
+    text-align: center;
+    padding: 6rem 2rem;
+  }
+
+  .empty-cart-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    opacity: 0.3;
+  }
+
+  .empty-cart h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-cart p {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .empty-cart-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 968px) {
+    .cart-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .cart-summary-section {
+      position: relative;
+      top: 0;
+    }
+
+    .cart-item {
+      grid-template-columns: 80px 1fr;
+      gap: 1rem;
+    }
+
+    .cart-item-quantity,
+    .cart-item-price {
+      grid-column: 1 / -1;
+    }
+
+    .cart-item-remove {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+  }
+</style>
+
+<script>
+  function incrementCartQuantity(key) {
+    const input = document.getElementById('updates_' + key);
+    input.value = parseInt(input.value) + 1;
+  }
+
+  function decrementCartQuantity(key) {
+    const input = document.getElementById('updates_' + key);
+    if (parseInt(input.value) > 1) {
+      input.value = parseInt(input.value) - 1;
+    }
+  }
+
+  function removeCartItem(key) {
+    if (confirm('Remove this item from your cart?')) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: key,
+          quantity: 0
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error removing the item.');
+      });
+    }
+  }
+
+  // Auto-save cart note
+  const cartNoteTextarea = document.getElementById('CartNote');
+  if (cartNoteTextarea) {
+    let saveTimeout;
+    cartNoteTextarea.addEventListener('input', function() {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        fetch('/cart/update.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            note: this.value
+          })
+        });
+      }, 1000);
+    });
+  }
+</script>

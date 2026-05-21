@@ -1,0 +1,488 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="container">
+      <h1 class="hero-title">{{ settings.hero_title | default: 'Pellair Oils' }}</h1>
+      <p class="hero-subtitle">{{ settings.hero_subtitle | default: 'Exclusive Fragrance Oils for Discerning Businesses' }}</p>
+      
+      {% if customer %}
+        {% if customer.tags contains 'approved' %}
+          <div class="hero-actions">
+            <a href="/collections/all" class="btn btn-primary">Explore Catalog</a>
+            <a href="/collections/brands" class="btn btn-secondary">Shop by Brand</a>
+          </div>
+        {% else %}
+          <div class="alert alert-warning" style="max-width: 600px; margin: 2rem auto;">
+            Your business registration is pending approval. You'll receive access within 24-48 hours.
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="hero-actions">
+          <a href="/account/register" class="btn btn-primary">Register Your Business</a>
+          <a href="/account/login" class="btn btn-secondary">Business Login</a>
+        </div>
+        {% if settings.enable_b2b_only %}
+          <p class="hero-note">{{ settings.registration_message }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="ornamental-divider">
+  <span>❖</span>
+</div>
+
+<!-- Featured Brands Section -->
+<section class="featured-brands-section">
+  <div class="container">
+    <h2 class="section-title">{{ 'homepage.sections.shop_by_brand' | t }}</h2>
+    <p class="section-subtitle">Inspired by the world's most prestigious perfume houses</p>
+    
+    <div class="brands-grid">
+      {% assign brands = settings.brands_list | split: ',' %}
+      {% for brand in brands limit: 9 %}
+        <a href="/collections/all?filter.p.m.custom.brand={{ brand | strip | url_encode }}" class="brand-card card">
+          <h3>{{ brand | strip }}</h3>
+          <span class="brand-arrow">→</span>
+        </a>
+      {% endfor %}
+    </div>
+    
+    <div class="section-cta">
+      <a href="/collections/brands" class="btn btn-secondary">View All Brands</a>
+    </div>
+  </div>
+</section>
+
+<div class="ornamental-divider">
+  <span>❖</span>
+</div>
+
+<!-- Accords Section -->
+<section class="accords-section">
+  <div class="container">
+    <h2 class="section-title">{{ 'homepage.sections.shop_by_accord' | t }}</h2>
+    <p class="section-subtitle">Discover fragrances by their olfactory families</p>
+    
+    <div class="accords-grid">
+      <a href="/collections/all?filter.p.m.custom.accord=floral" class="accord-card">
+        <div class="accord-icon">🌸</div>
+        <h3>Floral</h3>
+        <p>Rose, Jasmine, Violet</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=woody" class="accord-card">
+        <div class="accord-icon">🌲</div>
+        <h3>Woody</h3>
+        <p>Sandalwood, Cedar, Vetiver</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=oriental" class="accord-card">
+        <div class="accord-icon">✨</div>
+        <h3>Oriental</h3>
+        <p>Vanilla, Amber, Incense</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=fresh" class="accord-card">
+        <div class="accord-icon">💨</div>
+        <h3>Fresh</h3>
+        <p>Marine, Green, Herbal</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=citrus" class="accord-card">
+        <div class="accord-icon">🍋</div>
+        <h3>Citrus</h3>
+        <p>Bergamot, Lemon, Orange</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=spicy" class="accord-card">
+        <div class="accord-icon">🌶️</div>
+        <h3>Spicy</h3>
+        <p>Pepper, Cinnamon, Cardamom</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=oud" class="accord-card">
+        <div class="accord-icon">🪵</div>
+        <h3>Oud</h3>
+        <p>Agarwood, Smoky, Animalic</p>
+      </a>
+      
+      <a href="/collections/all?filter.p.m.custom.accord=leather" class="accord-card">
+        <div class="accord-icon">👜</div>
+        <h3>Leather</h3>
+        <p>Suede, Birch, Tobacco</p>
+      </a>
+    </div>
+    
+    <div class="section-cta">
+      <a href="/collections/accords" class="btn btn-secondary">Explore All Accords</a>
+    </div>
+  </div>
+</section>
+
+<div class="ornamental-divider">
+  <span>❖</span>
+</div>
+
+<!-- Why Choose Us Section -->
+<section class="why-choose-section">
+  <div class="container">
+    <h2 class="section-title">Why Partner With Pellair Oils</h2>
+    
+    <div class="features-grid">
+      <div class="feature-card card">
+        <div class="feature-icon">✦</div>
+        <h3>Premium Quality</h3>
+        <p>Our fragrance oils are crafted to match the finest niche perfumes, using only the highest quality ingredients and precise formulations.</p>
+      </div>
+      
+      <div class="feature-card card">
+        <div class="feature-icon">⚗️</div>
+        <h3>Expert Recreation</h3>
+        <p>Each scent is meticulously developed by master perfumers to capture the essence of luxury brands like Guerlain, Nasomatto, and Orto Parisi.</p>
+      </div>
+      
+      <div class="feature-card card">
+        <div class="feature-icon">📦</div>
+        <h3>Bulk Ordering</h3>
+        <p>Flexible ordering from 100g to 5kg+ with competitive B2B pricing for verified business partners.</p>
+      </div>
+      
+      <div class="feature-card card">
+        <div class="feature-icon">🔒</div>
+        <h3>Business Exclusive</h3>
+        <p>Our platform is exclusively for registered businesses, ensuring professional partnerships and industry-grade products.</p>
+      </div>
+      
+      <div class="feature-card card">
+        <div class="feature-icon">🚚</div>
+        <h3>Reliable Shipping</h3>
+        <p>Fast and secure shipping with professional packaging to ensure your fragrance oils arrive in perfect condition.</p>
+      </div>
+      
+      <div class="feature-card card">
+        <div class="feature-icon">💎</div>
+        <h3>Luxury Inspired</h3>
+        <p>From classic Shalimar to modern Baccarat Rouge, we offer interpretations of the world's most coveted fragrances.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% unless customer %}
+<div class="ornamental-divider">
+  <span>❖</span>
+</div>
+
+<!-- CTA Section for Non-Logged In Users -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Ready to Elevate Your Business?</h2>
+      <p>Join our exclusive network of verified business partners and gain access to premium fragrance oils inspired by the world's finest perfumes.</p>
+      <div class="cta-actions">
+        <a href="/account/register" class="btn btn-primary">Register Your Business</a>
+        <a href="/pages/about" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endunless %}
+
+<style>
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: 
+      linear-gradient(135deg, rgba(13, 13, 13, 0.95) 0%, rgba(20, 20, 20, 0.9) 100%),
+      radial-gradient(circle at 30% 50%, rgba(201, 169, 97, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 70% 50%, rgba(201, 169, 97, 0.05) 0%, transparent 50%);
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 4rem;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      repeating-linear-gradient(
+        0deg,
+        rgba(201, 169, 97, 0.03) 0px,
+        transparent 2px,
+        transparent 4px
+      );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 4rem 0;
+  }
+
+  .hero-title {
+    font-size: 5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+    margin-bottom: 3rem;
+    font-family: var(--font-heading);
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-note {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Section Styling */
+  .featured-brands-section,
+  .accords-section,
+  .why-choose-section {
+    padding: 4rem 0;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  .section-cta {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  /* Brands Grid */
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .brand-card {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .brand-card h3 {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .brand-card:hover h3 {
+    color: var(--color-secondary);
+  }
+
+  .brand-arrow {
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .brand-card:hover .brand-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Accords Grid */
+  .accords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .accord-card {
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    cursor: pointer;
+  }
+
+  .accord-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(201, 169, 97, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  }
+
+  .accord-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: grayscale(30%);
+    transition: filter 0.3s ease;
+  }
+
+  .accord-card:hover .accord-icon {
+    filter: grayscale(0%);
+  }
+
+  .accord-card h3 {
+    font-size: 1.4rem;
+    color: var(--color-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .accord-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  /* Features Grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .feature-card {
+    padding: 2.5rem;
+    text-align: center;
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-secondary);
+  }
+
+  .feature-card h3 {
+    font-size: 1.4rem;
+    color: var(--color-secondary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .feature-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(201, 169, 97, 0.05) 100%);
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+  }
+
+  .cta-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .cta-content h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-content p {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 3rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .brands-grid,
+    .accords-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-content h2 {
+      font-size: 2rem;
+    }
+
+    .cta-content p {
+      font-size: 1rem;
+    }
+  }
+</style>

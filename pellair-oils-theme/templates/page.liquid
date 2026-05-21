@@ -1,0 +1,81 @@
+<div class="container">
+  
+  <div class="page-header">
+    <h1>{{ page.title }}</h1>
+  </div>
+
+  <div class="page-content">
+    {{ page.content }}
+  </div>
+
+</div>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .page-header h1 {
+    font-size: 3rem;
+  }
+
+  .page-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .page-content h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-secondary);
+  }
+
+  .page-content h3 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .page-content p {
+    margin-bottom: 1.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .page-content ul,
+  .page-content ol {
+    margin-left: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .page-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-content a {
+    color: var(--color-secondary);
+    text-decoration: underline;
+  }
+
+  .page-content a:hover {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: 2rem;
+    }
+
+    .page-content {
+      padding: 1.5rem;
+    }
+  }
+</style>

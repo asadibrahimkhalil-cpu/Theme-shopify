@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="customer-auth-wrapper">
+    <div class="auth-container">
+      
+      <div class="auth-header">
+        <h1>Activate Your Account</h1>
+        <p class="auth-subtitle">Set your password to complete registration</p>
+      </div>
+
+      {% form 'activate_customer_password' %}
+        
+        {% if form.errors %}
+          <div class="alert alert-error">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="alert alert-info">
+          Your business registration has been approved! Please set your password to activate your account.
+        </div>
+
+        <div class="form-field">
+          <label for="CustomerPassword">Password *</label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="CustomerPassword"
+            required
+            placeholder="Minimum 8 characters"
+            minlength="8"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="CustomerPasswordConfirmation">Confirm Password *</label>
+          <input
+            type="password"
+            name="customer[password_confirmation]"
+            id="CustomerPasswordConfirmation"
+            required
+            placeholder="Re-enter your password"
+            minlength="8"
+          >
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-full">
+            Activate Account
+          </button>
+        </div>
+
+        <div class="auth-links">
+          <a href="/account/login" class="link-secondary">Return to Login</a>
+        </div>
+
+      {% endform %}
+
+    </div>
+  </div>
+</div>

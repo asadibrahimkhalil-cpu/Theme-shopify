@@ -1,0 +1,132 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "404": {
+      "title": "404 - Page Not Found",
+      "subtext": "The page you requested does not exist."
+    },
+    "breadcrumbs": {
+      "home": "Home"
+    },
+    "forms": {
+      "post_field_error_html": "Please correct the highlighted fields."
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "password_page": {
+      "opening_soon": "Opening Soon"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "close": "Close"
+  },
+  "products": {
+    "general": {
+      "from_text_html": "From {{ price }}",
+      "sale_price": "Sale price",
+      "regular_price": "Regular price"
+    },
+    "product": {
+      "sold_out": "Sold Out",
+      "unavailable": "Unavailable",
+      "add_to_cart": "Add to Cart",
+      "quantity": "Quantity",
+      "price": "Price",
+      "brand": "Brand",
+      "accord": "Accord",
+      "concentration": "Concentration",
+      "size": "Size"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Your Cart",
+      "remove": "Remove",
+      "subtotal": "Subtotal",
+      "taxes_and_shipping": "Taxes and shipping calculated at checkout",
+      "update": "Update Cart",
+      "checkout": "Proceed to Checkout",
+      "empty": "Your cart is currently empty.",
+      "continue_shopping": "Continue Shopping",
+      "note": "Order Notes"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "My Account",
+      "details": "Account Details",
+      "view_addresses": "View Addresses",
+      "return": "Return to Account Details"
+    },
+    "login": {
+      "title": "Business Login",
+      "email": "Email",
+      "password": "Password",
+      "sign_in": "Sign In",
+      "cancel": "Return to Store",
+      "forgot_password": "Forgot your password?",
+      "create_account": "Register Your Business"
+    },
+    "register": {
+      "title": "Business Registration",
+      "business_name": "Business Name",
+      "business_type": "Business Type",
+      "tax_id": "Tax ID / Business Registration Number",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Submit for Approval",
+      "approval_message": "Thank you for registering. Your application will be reviewed within 24-48 hours."
+    },
+    "orders": {
+      "title": "Order History",
+      "order_number": "Order",
+      "date": "Date",
+      "payment_status": "Payment Status",
+      "fulfillment_status": "Fulfillment Status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    }
+  },
+  "homepage": {
+    "sections": {
+      "featured_collections": "Featured Collections",
+      "shop_by_brand": "Shop by Brand",
+      "shop_by_accord": "Shop by Accord"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "No products found",
+      "items_with_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      }
+    },
+    "filters": {
+      "title": "Filter",
+      "clear_all": "Clear All",
+      "apply": "Apply",
+      "brand": "Brand",
+      "accord": "Accord",
+      "size": "Size",
+      "concentration": "Concentration"
+    },
+    "sorting": {
+      "title": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best Selling",
+      "az": "Alphabetically, A-Z",
+      "za": "Alphabetically, Z-A",
+      "price_ascending": "Price, low to high",
+      "price_descending": "Price, high to low",
+      "date_descending": "Date, new to old",
+      "date_ascending": "Date, old to new"
+    }
+  }
+}

@@ -1,0 +1,676 @@
+<div class="container">
+  
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span>/</span>
+    <a href="/collections/all">All Products</a>
+    <span>/</span>
+    <span>{{ product.title }}</span>
+  </div>
+
+  <div class="product-layout">
+    
+    <!-- Product Images -->
+    <div class="product-images">
+      <div class="product-main-image">
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | img_url: 'large' }}" alt="{{ product.title | escape }}" id="MainProductImage">
+        {% else %}
+          <div class="no-image">No image available</div>
+        {% endif %}
+      </div>
+      
+      {% if product.images.size > 1 %}
+        <div class="product-thumbnails">
+          {% for image in product.images %}
+            <div class="thumbnail {% if forloop.first %}active{% endif %}" data-image="{{ image | img_url: 'large' }}">
+              <img src="{{ image | img_url: 'small' }}" alt="{{ product.title | escape }}">
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info-main">
+      
+      <!-- Brand -->
+      {% if product.metafields.custom.brand or product.vendor %}
+        <div class="product-brand-badge">
+          {{ product.metafields.custom.brand | default: product.vendor }}
+        </div>
+      {% endif %}
+
+      <h1 class="product-title-main">{{ product.title }}</h1>
+
+      <!-- Accord -->
+      {% if product.metafields.custom.accord %}
+        <div class="product-accord-tag">
+          <span class="accord-label">Accord:</span>
+          <span class="accord-value">{{ product.metafields.custom.accord }}</span>
+        </div>
+      {% endif %}
+
+      <!-- Pricing -->
+      <div class="product-pricing">
+        {% if product.compare_at_price > product.price %}
+          <span class="price-compare">{{ product.compare_at_price | money }}</span>
+        {% endif %}
+        <span class="price-main">{{ product.price | money }}</span>
+        {% if customer and customer.tags contains 'approved' %}
+          <span class="price-label">B2B Price</span>
+        {% endif %}
+      </div>
+
+      <!-- Description -->
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+
+      <!-- Product Meta Information -->
+      <div class="product-meta-grid">
+        {% if product.metafields.custom.concentration %}
+          <div class="meta-item">
+            <span class="meta-label">Concentration:</span>
+            <span class="meta-value">{{ product.metafields.custom.concentration }}</span>
+          </div>
+        {% endif %}
+        
+        {% if product.metafields.custom.top_notes %}
+          <div class="meta-item">
+            <span class="meta-label">Top Notes:</span>
+            <span class="meta-value">{{ product.metafields.custom.top_notes }}</span>
+          </div>
+        {% endif %}
+        
+        {% if product.metafields.custom.middle_notes %}
+          <div class="meta-item">
+            <span class="meta-label">Middle Notes:</span>
+            <span class="meta-value">{{ product.metafields.custom.middle_notes }}</span>
+          </div>
+        {% endif %}
+        
+        {% if product.metafields.custom.base_notes %}
+          <div class="meta-item">
+            <span class="meta-label">Base Notes:</span>
+            <span class="meta-value">{{ product.metafields.custom.base_notes }}</span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="ornamental-divider">
+        <span>❖</span>
+      </div>
+
+      <!-- Add to Cart Form -->
+      {% form 'product', product %}
+        
+        {% if product.available %}
+          
+          <!-- Variant Selector -->
+          {% if product.variants.size > 1 %}
+            <div class="form-field">
+              <label for="ProductSelect">{{ 'products.product.size' | t }}</label>
+              <select name="id" id="ProductSelect" class="product-variant-select">
+                {% for variant in product.variants %}
+                  <option 
+                    value="{{ variant.id }}"
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                    {{ variant.title }} - {{ variant.price | money }}
+                    {% unless variant.available %} - Sold Out{% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {% else %}
+            <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+          {% endif %}
+
+          <!-- Quantity -->
+          <div class="form-field">
+            <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+            <div class="quantity-selector">
+              <button type="button" class="quantity-btn" onclick="decrementQuantity()">−</button>
+              <input 
+                type="number" 
+                id="Quantity" 
+                name="quantity" 
+                value="1" 
+                min="1" 
+                class="quantity-input"
+              >
+              <button type="button" class="quantity-btn" onclick="incrementQuantity()">+</button>
+            </div>
+          </div>
+
+          <!-- Minimum Order Quantity -->
+          {% if product.metafields.custom.minimum_order %}
+            <p class="minimum-order-note">
+              Minimum Order: {{ product.metafields.custom.minimum_order }} units
+            </p>
+          {% endif %}
+
+          <!-- Add to Cart Button -->
+          <button type="submit" name="add" class="btn btn-primary btn-full btn-add-to-cart">
+            {{ 'products.product.add_to_cart' | t }}
+          </button>
+
+        {% else %}
+          <button type="button" class="btn btn-secondary btn-full" disabled>
+            {{ 'products.product.sold_out' | t }}
+          </button>
+        {% endif %}
+
+      {% endform %}
+
+      <!-- Product Tags -->
+      {% if product.tags.size > 0 %}
+        <div class="product-tags">
+          {% for tag in product.tags %}
+            <a href="/collections/all/{{ tag | handle }}" class="product-tag">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- Share -->
+      <div class="product-share">
+        <span class="share-label">Share:</span>
+        <a href="https://www.facebook.com/sharer.php?u={{ shop.url }}{{ product.url }}" target="_blank" class="share-btn">Facebook</a>
+        <a href="https://twitter.com/share?url={{ shop.url }}{{ product.url }}&text={{ product.title }}" target="_blank" class="share-btn">Twitter</a>
+        <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | img_url: 'large' }}&description={{ product.title }}" target="_blank" class="share-btn">Pinterest</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Product Tabs -->
+  <div class="product-tabs-section">
+    <div class="tabs">
+      <button class="tab active" data-tab="details">Product Details</button>
+      <button class="tab" data-tab="notes">Fragrance Notes</button>
+      <button class="tab" data-tab="usage">Usage & Storage</button>
+    </div>
+
+    <div class="tab-content active" id="details">
+      <div class="tab-content-inner">
+        <h3>Product Information</h3>
+        {{ product.description }}
+        
+        {% if product.metafields.custom.ingredients %}
+          <h4>Ingredients</h4>
+          <p>{{ product.metafields.custom.ingredients }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="tab-content" id="notes">
+      <div class="tab-content-inner">
+        <h3>Fragrance Profile</h3>
+        
+        {% if product.metafields.custom.top_notes %}
+          <div class="notes-section">
+            <h4>Top Notes</h4>
+            <p>{{ product.metafields.custom.top_notes }}</p>
+          </div>
+        {% endif %}
+        
+        {% if product.metafields.custom.middle_notes %}
+          <div class="notes-section">
+            <h4>Middle Notes (Heart)</h4>
+            <p>{{ product.metafields.custom.middle_notes }}</p>
+          </div>
+        {% endif %}
+        
+        {% if product.metafields.custom.base_notes %}
+          <div class="notes-section">
+            <h4>Base Notes</h4>
+            <p>{{ product.metafields.custom.base_notes }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="tab-content" id="usage">
+      <div class="tab-content-inner">
+        <h3>Usage Guidelines</h3>
+        <p>Our premium fragrance oils are highly concentrated and designed for professional use in perfumery, candle making, soap production, and cosmetic formulation.</p>
+        
+        <h4>Storage Recommendations</h4>
+        <ul>
+          <li>Store in a cool, dark place away from direct sunlight</li>
+          <li>Keep containers tightly sealed when not in use</li>
+          <li>Ideal storage temperature: 15-25°C (59-77°F)</li>
+          <li>Keep away from heat sources and open flames</li>
+        </ul>
+        
+        <h4>Safety Information</h4>
+        <ul>
+          <li>For external use only</li>
+          <li>Keep out of reach of children</li>
+          <li>Avoid contact with eyes</li>
+          <li>Perform patch test before extensive use</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  {% if product.metafields.custom.brand %}
+    <div class="related-products-section">
+      <h2>More from {{ product.metafields.custom.brand | default: product.vendor }}</h2>
+      <div class="product-grid" id="related-products">
+        <!-- Related products will be loaded dynamically or via collection -->
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+
+<style>
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin: 3rem 0;
+  }
+
+  .product-images {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+  }
+
+  .product-main-image {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .product-main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+  }
+
+  .product-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 1rem;
+  }
+
+  .thumbnail {
+    aspect-ratio: 3/4;
+    border: 2px solid rgba(201, 169, 97, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .thumbnail:hover,
+  .thumbnail.active {
+    border-color: var(--color-secondary);
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-brand-badge {
+    display: inline-block;
+    color: var(--color-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .product-title-main {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .product-accord-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(201, 169, 97, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .accord-label {
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+  }
+
+  .accord-value {
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  .product-pricing {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(201, 169, 97, 0.05);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: 8px;
+  }
+
+  .price-main {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    font-family: var(--font-heading);
+  }
+
+  .price-compare {
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+  }
+
+  .price-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .product-description {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin: 2rem 0;
+  }
+
+  .product-meta-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .meta-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(26, 26, 26, 0.4);
+    border: 1px solid rgba(201, 169, 97, 0.1);
+    border-radius: 6px;
+  }
+
+  .meta-label {
+    font-weight: 600;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    min-width: 120px;
+  }
+
+  .meta-value {
+    color: var(--color-text);
+    font-size: 0.95rem;
+  }
+
+  .product-variant-select {
+    width: 100%;
+  }
+
+  .btn-add-to-cart {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    padding: 1.3rem;
+  }
+
+  .minimum-order-note {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0;
+    font-style: italic;
+  }
+
+  .product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+
+  .product-tag {
+    padding: 0.4rem 0.8rem;
+    background: rgba(201, 169, 97, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    transition: all 0.3s ease;
+  }
+
+  .product-tag:hover {
+    background: rgba(201, 169, 97, 0.2);
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+  }
+
+  .product-share {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(201, 169, 97, 0.1);
+    margin-top: 2rem;
+  }
+
+  .share-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .share-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+  }
+
+  .share-btn:hover {
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    border-color: var(--color-secondary);
+  }
+
+  .product-tabs-section {
+    margin: 4rem 0;
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .tab-content-inner {
+    padding: 2rem 0;
+  }
+
+  .tab-content-inner h3 {
+    font-size: 1.8rem;
+    color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  .tab-content-inner h4 {
+    font-size: 1.3rem;
+    color: var(--color-text);
+    margin: 1.5rem 0 1rem;
+  }
+
+  .tab-content-inner p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .tab-content-inner ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .tab-content-inner ul li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .tab-content-inner ul li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--color-secondary);
+  }
+
+  .notes-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(201, 169, 97, 0.05);
+    border-left: 3px solid var(--color-secondary);
+    border-radius: 4px;
+  }
+
+  .related-products-section {
+    margin: 6rem 0 3rem;
+  }
+
+  .related-products-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 968px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .product-images {
+      position: relative;
+      top: 0;
+    }
+
+    .product-title-main {
+      font-size: 2rem;
+    }
+
+    .price-main {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  // Thumbnail image switcher
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  const mainImage = document.getElementById('MainProductImage');
+
+  thumbnails.forEach(thumb => {
+    thumb.addEventListener('click', function() {
+      thumbnails.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      if (mainImage) {
+        mainImage.src = this.dataset.image;
+      }
+    });
+  });
+
+  // Quantity controls
+  function incrementQuantity() {
+    const input = document.getElementById('Quantity');
+    input.value = parseInt(input.value) + 1;
+  }
+
+  function decrementQuantity() {
+    const input = document.getElementById('Quantity');
+    if (parseInt(input.value) > 1) {
+      input.value = parseInt(input.value) - 1;
+    }
+  }
+
+  // Tabs
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetTab = this.dataset.tab;
+      
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      
+      this.classList.add('active');
+      document.getElementById(targetTab).classList.add('active');
+    });
+  });
+
+  // Add to cart with notification
+  const addToCartForm = document.querySelector('form[action*="/cart/add"]');
+  if (addToCartForm) {
+    addToCartForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Update cart count
+        updateCartCount();
+        
+        // Show success message
+        alert('✓ Product added to cart!');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error adding the product to cart.');
+      });
+    });
+  }
+</script>
